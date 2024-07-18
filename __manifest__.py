@@ -9,6 +9,7 @@
         # 'security/ir.model.access.csv',
         'views/lot_serial_views.xml',
         'views/res_partner_views.xml',
+        'views/stock_move_lines_views.xml',
         # 'views/account_move_view.xml',
         # 'views/delivery_locations_views.xml',
     ],

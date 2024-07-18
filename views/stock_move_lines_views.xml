@@ -1,0 +1,24 @@
+<odoo>
+    <data>
+        <record id="view_stock_move_line_tree" model="ir.ui.view">
+            <field name="name">stock.move.line.tree</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='lot_id']" position="after">
+                    <field name="lot_ids" widget="many2many_tags"/>
+                </xpath>
+                <xpath expr="//field[@name='lot_id']" position="attributes">
+                    <attribute name="domain">
+                        [
+                            '|',
+                            ('company_id', '=', False), 
+                            ('company_id', '=', company_id),
+                            ('id', 'in', lot_ids),
+                        ]
+                    </attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

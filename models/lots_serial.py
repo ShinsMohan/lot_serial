@@ -7,7 +7,7 @@ class StockLot(models.Model):
     vendor = fields.Many2one('res.partner', string='Vendor')
     supplier_batch_number = fields.Char(string='Supplier Batch Number')
     expiration_date = fields.Date(string='Expiration Date')
-    austerilan_percentage = fields.Float(string='Austerilan Percentage')
+    austerilan_percentage = fields.Float(string='Austerilan Percentage')    
 
     @api.model
     def create(self, vals):
@@ -15,15 +15,6 @@ class StockLot(models.Model):
         if 'name' not in vals:
             vals['name'] = self._generate_name(vals)
         return super(StockLot, self).create(vals)
-
-    def write(self, vals):
-        if 'expiration_date' in vals:
-            self._check_expiration_date(vals.get('expiration_date'))
-        for record in self:
-            if any(field in vals for field in ['vendor', 'supplier_batch_number']):
-                new_name = self._generate_name(vals, record)
-                vals.update({'name': new_name})
-        return super(StockLot, self).write(vals)
 
     def _generate_name(self, vals, record=None):
         vendor = self.env['res.partner'].browse(vals.get('vendor')) if not record else record.vendor
@@ -35,7 +26,7 @@ class StockLot(models.Model):
 
     def _check_expiration_date(self, expiration_date):
         if expiration_date:
-            expiration_date = datetime.strptime(expiration_date, '%Y-%m-%d').date()
+            expiration_date = datetime.strptime(expiration_date, '%Y-%m-%d %H:%M:%S').date()
             if expiration_date < datetime.now().date() + timedelta(weeks=4):
                 raise exceptions.ValidationError("The expiration date must be at least 4 weeks from today.")
 
